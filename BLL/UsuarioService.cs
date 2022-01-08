@@ -10,17 +10,19 @@ namespace BLL
     public class UsuarioService
     {
         private readonly UsuarioRepository usuarioRepository;
+        private readonly Encrypt encrypt;
 
         public UsuarioService(BookStoreContext _context)
         {
             usuarioRepository = new UsuarioRepository(_context);
+            encrypt = new Encrypt();
         }
 
         public BuscarUsuarioResponse ValidarUsuario(string user, string password)
         {
             try
             {
-                var usuario = usuarioRepository.BuscarUsuario(user, password);
+                var usuario = usuarioRepository.BuscarUsuario(user, encrypt.GetSHA256(password));
                 if (usuario == null)
                 {
                     return new BuscarUsuarioResponse("Usuario no existe");

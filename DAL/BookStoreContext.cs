@@ -8,9 +8,10 @@ namespace DAL
 {
     public class BookStoreContext: DbContext
     {
+        private readonly Encrypt encrypt;
         public BookStoreContext(DbContextOptions contextOptions_) : base(contextOptions_)
         {
-           
+           encrypt = new Encrypt();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,7 +21,7 @@ namespace DAL
                         new Libro { IdLibro = 3, Titulo = "Rich Dad Poor Dad", Autor = "Robert Kiyosaki", Publicador = "Plata publishing", Genero = "Personal finance", Precio = 288 }
                 );
             modelBuilder.Entity<Usuario>()
-                .HasData(new Usuario { Name = "Victor Venegas", User = "vvenegas", Password = "12345", Role = "Administrador" });
+                .HasData(new Usuario {IdUser = 1, Name = "Victor Venegas", User = "vvenegas", Password = encrypt.GetSHA256("12345"), Role = "Administrador" });
         }
 
         

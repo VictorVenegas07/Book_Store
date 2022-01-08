@@ -19,6 +19,7 @@ namespace Presentacion.Models
             User = usuario.User;
             Role = usuario.Role;
             Name = usuario.Name;
+            Password = usuario.Password;
 
         }
     }

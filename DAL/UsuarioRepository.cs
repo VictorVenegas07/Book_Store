@@ -17,7 +17,11 @@ namespace DAL
 
         public Usuario BuscarUsuario(string user, string password)
         {
-            return context.Usuarios.FirstOrDefault(u => u.User == user && u.Password == password);
+            using (context)
+            {
+                return context.Usuarios.FirstOrDefault(u => u.User == user && u.Password == password);
+            }
+           
         }
 
     }

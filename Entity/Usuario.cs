@@ -11,6 +11,7 @@ namespace Entity
     public class Usuario
     {
         [Key]
+        public int IdUser { get; set; }
         public string User { get; set; }
         [JsonIgnore]
         public string Password { get; set; }
