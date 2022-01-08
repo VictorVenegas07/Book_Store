@@ -32,7 +32,6 @@ namespace Presentacion.Service
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-
                     new Claim(ClaimTypes.Name, usuario.Name),
                     new Claim(ClaimTypes.Role, usuario.Role.ToString()),
                 }),

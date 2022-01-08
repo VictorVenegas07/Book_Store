@@ -28,9 +28,7 @@ namespace Presentacion.Controllers
         {
             var response = libroService.ConsultarLibros();
             if (response.Error == true)
-            {
                 return BadRequest(response.Mensaje);
-            }
             return Ok(response.Libros.Select(e => new LibroViewModels(e)));
             
         }
@@ -39,47 +37,25 @@ namespace Presentacion.Controllers
         [HttpPost]
         public async Task<ActionResult<LibroViewModels>> Post(LibroInputModels libroInput)
         {
-            var respuesta = await libroService.GuardarLibro(MapearLibro(libroInput));
+            var respuesta = await libroService.GuardarLibro( new Libro(libroInput.Titulo, libroInput.Autor,
+                libroInput.Publicador, libroInput.Genero, libroInput.Precio));
             if (respuesta.Error)
-            {
-                ModelState.AddModelError("Guardar Libro", respuesta.Mensaje);
-                var problemDetails = new ValidationProblemDetails(ModelState)
-                {
-                    Status = StatusCodes.Status400BadRequest,
-                };
-                return BadRequest(problemDetails);
-            }
-            return Ok(respuesta.Libro);
+                return BadRequest(respuesta.Mensaje);
+          
+            return Ok(new LibroViewModels(respuesta.Libro));
 
         }
 
-        private Libro MapearLibro(LibroInputModels libroInput)
-        {
-            var libro = new Libro
-            {
-                Titulo = libroInput.Titulo,
-                Genero = libroInput.Genero,
-                Autor = libroInput.Autor,
-                Precio = libroInput.Precio,
-                Publicador = libroInput.Publicador
-            };
-            return libro;
-        }
 
         // PUT api/<LibroController>/5
         [HttpPut("{idLibro}")]
         public async Task<ActionResult<LibroViewModels>> Put(int idLibro,LibroInputModels libroInput)
         {
-            var respuesta = await libroService.ModificarLibro(idLibro,MapearLibro(libroInput));
+            var respuesta = await libroService.ModificarLibro(idLibro, new Libro(libroInput.Titulo, libroInput.Autor,
+                libroInput.Publicador, libroInput.Genero, libroInput.Precio));
             if (respuesta.Error)
-            {
-                ModelState.AddModelError("Modificar libro", respuesta.Mensaje);
-                var problemDetails = new ValidationProblemDetails(ModelState)
-                {
-                    Status = StatusCodes.Status400BadRequest,
-                };
-                return BadRequest(problemDetails);
-            }
+                return BadRequest(respuesta.Mensaje);
+            
             return Ok(new LibroViewModels(respuesta.Libro));
         }
 
@@ -89,15 +65,9 @@ namespace Presentacion.Controllers
         {
             var respuesta = await libroService.EliminarLibro(id);
             if (respuesta.Error)
-            {
-                ModelState.AddModelError("Eliminar libro", respuesta.Mensaje);
-                var problemDetails = new ValidationProblemDetails(ModelState)
-                {
-                    Status = StatusCodes.Status400BadRequest,
-                };
-                return BadRequest(problemDetails);
-            }
-            return Ok(respuesta.Libro);
+             return BadRequest(respuesta.Mensaje);
+            
+            return Ok(new LibroViewModels(respuesta.Libro));
         }
     }
 }

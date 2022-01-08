@@ -9,26 +9,23 @@ namespace BLL
 {
     public class LibroService
     {
-        private readonly BookStoreContext context;
+        private readonly LibroRepository libroRepository;
         public LibroService(BookStoreContext _context)
         {
-            context = _context;
+            libroRepository = new LibroRepository(_context);
         }
         public async Task<GuardarLibroResponse> GuardarLibro(Libro libro)
         {
             try
             {
-                if (context.Libros.Find(libro.IdLibro) != null)
+                if (libroRepository.BuscarLibro(libro.IdLibro))
                 {
                     return new GuardarLibroResponse("No es posible guardar este libro porque ya existe");
                 }
-                    context.Libros.Add(libro);
-                    await context.SaveChangesAsync();
-                    return new GuardarLibroResponse(libro);
+                 return new GuardarLibroResponse(await libroRepository.GuardarLirbo(libro));
             }
             catch (Exception e)
             {
-
                 return new GuardarLibroResponse("Se presento el siguiente error no se pudo guardar " + e.Message);
             }
         }
@@ -37,15 +34,10 @@ namespace BLL
         {
             try
             {
-                if (context.Libros.Any())
-                {
-                    return new ConsultarLibrosResponse(context.Libros.ToList());
-                }
-                return new ConsultarLibrosResponse("No hay libros registrados");
+                return new ConsultarLibrosResponse(libroRepository.ConsultarLibros());
             }
             catch (Exception e)
             {
-
                 return new ConsultarLibrosResponse("Se presento el siguiente error no se pudo guardar " + e.Message);
             }
         }
@@ -54,19 +46,14 @@ namespace BLL
         {
             try
             {
-                var libroBuscado = context.Libros.Find(idLibro);
-                if (libroBuscado == null)
+                if (!libroRepository.BuscarLibro(idLibro))
                 {
                     return new GuardarLibroResponse("No es posible modificar este libro porque no existe");
-                }
-                libroBuscado.ModificarLibro(libroModificado);
-                context.Libros.Update(libroBuscado);
-                await context.SaveChangesAsync();
-                return new GuardarLibroResponse(libroBuscado);
+                } 
+                return new GuardarLibroResponse(await libroRepository.ModificarLibro(idLibro, libroModificado));
             }
             catch (Exception e)
             {
-
                 return new GuardarLibroResponse("Se presento el siguiente error no se pudo guardar " + e.Message);
             }
         }
@@ -74,23 +61,18 @@ namespace BLL
         public async Task<EliminarLibroResponse> EliminarLibro(int idLibro)
         {
             try
-            {
-                var libroBuscado = context.Libros.Find(idLibro);
-                if (libroBuscado == null)
+            {              
+                if (!libroRepository.BuscarLibro(idLibro))
                 {
-                    return new EliminarLibroResponse("No es posible modificar este libro porque no existe");
+                    return new EliminarLibroResponse("No es posible eliminar este libro porque no existe");
                 }
-                context.Libros.Remove(libroBuscado);
-                await context.SaveChangesAsync();
-                return new EliminarLibroResponse(libroBuscado,"Eliminado con exito");
+                return new EliminarLibroResponse(await libroRepository.EliminarLibro(idLibro),"Eliminado con exito");
             }
             catch (Exception e)
             {
-
                 return new EliminarLibroResponse("Se presento el siguiente error no se pudo guardar " + e.Message);
             }
         }
-
 
     }
 

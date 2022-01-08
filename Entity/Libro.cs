@@ -22,6 +22,20 @@ namespace Entity
             Precio = libroModificado.Precio;
         }
 
+        public Libro( string titulo, string autor, string publicador, string genero, double precio)
+        {
+            this.Titulo = titulo;
+            this.Autor = autor;
+            this.Publicador = publicador;
+            this.Genero = genero;
+            this.Precio = precio;
+        }
+        public Libro()
+        {
+
+        }
+
+
     }
 
    
