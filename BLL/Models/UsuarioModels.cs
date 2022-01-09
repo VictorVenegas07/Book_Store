@@ -1,7 +1,7 @@
 ﻿using Entity;
 using System.Text.Json.Serialization;
 
-namespace Presentacion.Models
+namespace BLL
 {
     public class UsuarioInputModels
     {

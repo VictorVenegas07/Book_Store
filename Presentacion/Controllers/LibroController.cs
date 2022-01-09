@@ -37,8 +37,7 @@ namespace Presentacion.Controllers
         [HttpPost]
         public async Task<ActionResult<LibroViewModels>> Post(LibroInputModels libroInput)
         {
-            var respuesta = await libroService.GuardarLibro( new Libro(libroInput.Titulo, libroInput.Autor,
-                libroInput.Publicador, libroInput.Genero, libroInput.Precio));
+            var respuesta = await libroService.GuardarLibro(libroInput);
             if (respuesta.Error)
                 return BadRequest(respuesta.Mensaje);
           
@@ -49,13 +48,12 @@ namespace Presentacion.Controllers
 
         // PUT api/<LibroController>/5
         [HttpPut("{idLibro}")]
-        public async Task<ActionResult<LibroViewModels>> Put(int idLibro,LibroInputModels libroInput)
+        public async Task<ActionResult<LibroViewModels>> Put(int idLibro, LibroInputModels libroInput)
         {
-            var respuesta = await libroService.ModificarLibro(idLibro, new Libro(libroInput.Titulo, libroInput.Autor,
-                libroInput.Publicador, libroInput.Genero, libroInput.Precio));
+            var respuesta = await libroService.ModificarLibro(idLibro, libroInput);
             if (respuesta.Error)
                 return BadRequest(respuesta.Mensaje);
-            
+
             return Ok(new LibroViewModels(respuesta.Libro));
         }
 

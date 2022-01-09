@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(BookStoreContext))]
-    [Migration("20211230195149_segunda_migracion")]
-    partial class segunda_migracion
+    [Migration("20220109201733_inicial")]
+    partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -78,8 +78,10 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Entity.Usuario", b =>
                 {
-                    b.Property<string>("User")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("IdUser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -90,17 +92,21 @@ namespace DAL.Migrations
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("User");
+                    b.Property<string>("User")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdUser");
 
                     b.ToTable("Usuarios");
 
                     b.HasData(
                         new
                         {
-                            User = "vvenegas",
+                            IdUser = 1,
                             Name = "Victor Venegas",
-                            Password = "12345",
-                            Role = "Administrador"
+                            Password = "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+                            Role = "Administrador",
+                            User = "vvenegas"
                         });
                 });
 #pragma warning restore 612, 618

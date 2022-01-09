@@ -14,20 +14,28 @@ namespace BLL
         {
             libroRepository = new LibroRepository(_context);
         }
-        public async Task<GuardarLibroResponse> GuardarLibro(Libro libro)
+        public async Task<GuardarLibroResponse> GuardarLibro(LibroInputModels libroInput)
         {
             try
             {
-                if (libroRepository.BuscarLibro(libro.IdLibro))
+                var libro = MapearLibro(libroInput);
+                var libroBuscado = await libroRepository.BuscarLibro(libro.IdLibro);
+                if (libroBuscado != null)
                 {
                     return new GuardarLibroResponse("No es posible guardar este libro porque ya existe");
                 }
-                 return new GuardarLibroResponse(await libroRepository.GuardarLirbo(libro));
+                 return new GuardarLibroResponse(await libroRepository.Añadir(libro));
             }
             catch (Exception e)
             {
                 return new GuardarLibroResponse("Se presento el siguiente error no se pudo guardar " + e.Message);
             }
+        }
+
+        private Libro MapearLibro(LibroInputModels libroInput)
+        {
+            return  new Libro(libroInput.Titulo, libroInput.Autor,
+                libroInput.Publicador, libroInput.Genero, libroInput.Precio);
         }
 
         public ConsultarLibrosResponse ConsultarLibros()
@@ -42,15 +50,17 @@ namespace BLL
             }
         }
 
-        public async Task<GuardarLibroResponse> ModificarLibro(int idLibro ,Libro libroModificado)
+        public async Task<GuardarLibroResponse> ModificarLibro(int idLibro, LibroInputModels libroInput)
         {
             try
             {
-                if (!libroRepository.BuscarLibro(idLibro))
+                var libroBuscado = await libroRepository.BuscarLibro(idLibro);
+                if (libroBuscado == null)
                 {
                     return new GuardarLibroResponse("No es posible modificar este libro porque no existe");
-                } 
-                return new GuardarLibroResponse(await libroRepository.ModificarLibro(idLibro, libroModificado));
+                }
+
+                return new GuardarLibroResponse(await libroRepository.Editar(MapearLibroBuscado(libroBuscado, libroInput)));
             }
             catch (Exception e)
             {
@@ -58,15 +68,26 @@ namespace BLL
             }
         }
 
+        private Libro MapearLibroBuscado(Libro libroBuscado, LibroInputModels libroInput)
+        {
+            libroBuscado.Autor = libroInput.Autor;
+            libroBuscado.Titulo = libroInput.Titulo;
+            libroBuscado.Genero = libroInput.Genero;
+            libroBuscado.Precio = libroInput.Precio;
+            libroBuscado.Publicador = libroInput.Publicador;
+            return libroBuscado;
+        }
+
         public async Task<EliminarLibroResponse> EliminarLibro(int idLibro)
         {
             try
-            {              
-                if (!libroRepository.BuscarLibro(idLibro))
+            {
+                var libroBuscado = await libroRepository.BuscarLibro(idLibro);
+                if (libroBuscado == null)
                 {
                     return new EliminarLibroResponse("No es posible eliminar este libro porque no existe");
                 }
-                return new EliminarLibroResponse(await libroRepository.EliminarLibro(idLibro),"Eliminado con exito");
+                return new EliminarLibroResponse(await libroRepository.Eliminar(libroBuscado),"Eliminado con exito");
             }
             catch (Exception e)
             {

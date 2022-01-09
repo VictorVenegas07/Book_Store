@@ -15,46 +15,39 @@ namespace DAL
             context = context_;
         }
 
-        public async Task<Libro> GuardarLirbo(Libro libro)
+        public async Task<Libro> Añadir(Libro libro)
         {
             using (context)
-            {
+            { 
                 context.Libros.Add(libro);
                 await context.SaveChangesAsync();
                 return libro;
             }
         }
 
-        public async Task<Libro> ModificarLibro(int idLibro, Libro libroModificado)
+        public async Task<Libro> Editar( Libro libroModificado)
         {
             using (context)
             {
-                var libroBuscado = context.Libros.Find(idLibro);
-                libroBuscado.ModificarLibro(libroModificado);
-                context.Libros.Update(libroBuscado);
+                context.Libros.Update(libroModificado);
                 await context.SaveChangesAsync();
-                return libroBuscado;
+                return libroModificado;
             }
         }
 
-        public async Task<Libro> EliminarLibro(int idLibro)
+        public async Task<Libro> Eliminar(Libro libro)
         {
             using (context)
             {
-                var libroBuscado = context.Libros.Find(idLibro);
-                context.Libros.Remove(libroBuscado);
+                context.Libros.Remove(libro);
                 await context.SaveChangesAsync();
-                return libroBuscado;
+                return libro;
             }
         }
 
-        public Boolean BuscarLibro(int idLibro)
+        public async Task<Libro> BuscarLibro(int idLibro)
         {
-            using (context)
-            {
-                return context.Libros.Any(l => l.IdLibro == idLibro);
-            }
-            
+                return await context.Libros.FindAsync(idLibro);
         }
 
         public List<Libro> ConsultarLibros()

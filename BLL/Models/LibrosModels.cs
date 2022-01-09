@@ -1,7 +1,7 @@
 ﻿using Entity;
 using System.ComponentModel.DataAnnotations;
 
-namespace Presentacion.Models
+namespace BLL
 {
     public class LibroInputModels
     {

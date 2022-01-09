@@ -13,15 +13,6 @@ namespace Entity
         public string Genero { get; set; }
         public double Precio { get; set; }
 
-        public void ModificarLibro(Libro libroModificado)
-        {
-            Titulo = libroModificado.Titulo;
-            Autor = libroModificado.Autor;
-            Publicador = libroModificado.Publicador;
-            Genero = libroModificado.Genero;   
-            Precio = libroModificado.Precio;
-        }
-
         public Libro( string titulo, string autor, string publicador, string genero, double precio)
         {
             this.Titulo = titulo;
