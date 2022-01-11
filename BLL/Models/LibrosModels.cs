@@ -15,6 +15,8 @@ namespace BLL
         public string Genero { get; set; }
         [Required(ErrorMessage = "El Precio es requerido")]
         public double Precio { get; set; }
+        [Required(ErrorMessage = "El usuario es requerido")]
+        public int IdUsuario { get; set; }
     }
 
     public class LibroViewModels : LibroInputModels
@@ -28,6 +30,7 @@ namespace BLL
             Publicador = libro.Publicador;
             Genero = libro.Genero;
             Precio = libro.Precio;
+            IdUsuario = libro.IdUsuario;
         }
     }
 }

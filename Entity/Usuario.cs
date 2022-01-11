@@ -17,5 +17,7 @@ namespace Entity
         public string Password { get; set; }
         public string Role { get; set; }
         public string Name { get; set; }
+        public List<Libro> Libros { get; set; }
+        public List<Log> Logs { get; set; }
     }
 }

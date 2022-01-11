@@ -17,12 +17,11 @@ namespace DAL
 
         public async Task<Libro> Añadir(Libro libro)
         {
-            using (context)
-            { 
+             
                 context.Libros.Add(libro);
                 await context.SaveChangesAsync();
                 return libro;
-            }
+            
         }
 
         public async Task<Libro> Editar( Libro libroModificado)

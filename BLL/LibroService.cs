@@ -10,9 +10,11 @@ namespace BLL
     public class LibroService
     {
         private readonly LibroRepository libroRepository;
+        private readonly LogRepository logRepository;
         public LibroService(BookStoreContext _context)
         {
             libroRepository = new LibroRepository(_context);
+            logRepository = new LogRepository(_context);
         }
         public async Task<GuardarLibroResponse> GuardarLibro(LibroInputModels libroInput)
         {
@@ -30,12 +32,17 @@ namespace BLL
             {
                 return new GuardarLibroResponse("Se presento el siguiente error no se pudo guardar " + e.Message);
             }
+            finally
+            {
+                var log = new Log { Accion = "Insert", IdUsuario = libroInput.IdUsuario };
+                await logRepository.Agregar(log);
+            }
         }
 
         private Libro MapearLibro(LibroInputModels libroInput)
         {
             return  new Libro(libroInput.Titulo, libroInput.Autor,
-                libroInput.Publicador, libroInput.Genero, libroInput.Precio);
+                libroInput.Publicador, libroInput.Genero, libroInput.Precio, libroInput.IdUsuario);
         }
 
         public ConsultarLibrosResponse ConsultarLibros()
